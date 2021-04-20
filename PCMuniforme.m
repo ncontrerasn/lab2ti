@@ -1,7 +1,7 @@
 %{
 construyendo m(t)
 hacemos un for para saber cuántas sinusoides vana a componer m(t)
-se itera para saber cuál es la frecuencia maxima
+se itera para saber cuál es la frecuencia máxima
 %}
 
 %inicializar m(t) en 0 para luego ir sumando las sinusoides
@@ -75,7 +75,9 @@ N = length(X);
 df = (1 / (N * Ts));                      
 tN = [ -(ceil((N - 1) / 2) : -1 : 1), 0, (1 : floor((N - 1) / 2)) ] * df;
 
-#arreglo de la función cuantificada
+#arreglos de la función cuantificada
+%xsq tiene la señal cuantizada
+%bits para procesarse y graficar los 6 tipos de señales requeridas
 [xsq, bits] = cuantUniforme(mt, 1, 4);            
 
 %gráfica #1: contiene la señal muestreada, señal cuantizada, la transformada de fourier y las 6 reprentaciones 
@@ -89,7 +91,7 @@ xlabel('t');
 ylabel('mt(t) (muestreada)');
 axis([0 T -sum(ai(:)) sum(ai(:))]);
 
-#graficamos la señal cuantizada
+#graficamos la señal cuantizada, aquí usamos xsq
 subplot(3, 3, 2);
 stem(t, xsq, 'r');
 title('Señal cuantizada');
@@ -110,14 +112,17 @@ Xmax = length(bits);
 #datos que determinan la presición de la gráfica, especifica el número de puntos en el eje horizontal
 datos = 1000;
 
-# vector de unos 
+#vector de unos 
 unos = ones(1, datos);
 
 %vector de ceros
 ceros = zeros(1, datos);
 
-# vector para graficar cada tipo de codificación
+#vector para graficar cada tipo de codificación
 array = [];
+
+%vector de tiempo para graficar las 6 señales
+t_2 = (0 : (length(array) - 1)) / datos;
 
 #unipolar NRZ
 for i = 1 : Xmax
@@ -130,7 +135,6 @@ for i = 1 : Xmax
 end
 
 %gráfica
-t_2 = (0 : (length(array) - 1)) / datos;
 subplot(3, 3, 4);
 plot(t_2, array);
 title('Unipolar NRZ');
@@ -145,7 +149,8 @@ array = [];
 for i = 1 : Xmax
   switch bits(i)
     case 0
-      array = [array  -unos]; # En este caso los 0 son represntados como -1
+      #los 0 son represntados como -1
+      array = [array  -unos]; 
     case 1
       array = [array  unos];
   end
@@ -163,7 +168,9 @@ grid on;
 array = [];
 
 #unipolar RZ
-RZ = [ones(1, datos/2) zeros(1, datos / 2)]; # Se concatena un 0 a la mitad de cada pulso
+#se concatena un 0 a la mitad de cada pulso
+%arreglo RZ para dar la forma de esta señal a la salida
+RZ = [ones(1, datos / 2) zeros(1, datos / 2)]; 
 for i = 1 : Xmax
   switch bits(i)
     case 0
@@ -233,6 +240,7 @@ grid on;
 array = [];
 
 #manchester
+%arreglo MAN para dar la forma de esta señal a la salida
 MAN = [ones(1, datos / 2)  -ones(1, datos / 2)];
 for i = 1 : Xmax
   switch bits(i)
@@ -254,7 +262,7 @@ grid on;
 #función m
 m = inline(cadena, 't');
 
-#Devolvemos la señal recuperada con los valores de la muestra
+#devolvemos la señal recuperada con los valores de la muestra
 %mrec es la sumatoria de la señal para demodular
 mrec = 0;
 
@@ -282,7 +290,7 @@ xlabel('t');
 ylabel('x(t)');
 axis([0 1 -sum(ai( : )) sum(ai( : ))]);
 
-%gráfica de la señal recuperada
+%gráfica de la señal recuperada usando el arreglo mrec
 subplot(2, 1 ,2);
 plot(t, mrec, 'b');
 title('Señal recuperada');

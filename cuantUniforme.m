@@ -1,43 +1,81 @@
-function [xq,bit]=cuantUniforme(x,xmax,n)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DESCRIPCIÓN: cuantiza x sobre (-xmax,xmax) usando 2^n niveles.
-% ENTRADAS: - x=señal de entrada.
-%                     - xmax=magnitud máxima de la señal a ser cuantizada.
-%                     - n=número de bits de cuantización.
-% SALIDAS: - xq=señal cuantizada.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [xq, bit] = cuantUniforme(x, xmax, n)
+  
+% DESCRIPCIÓN: cuantiza x sobre (-xmax, xmax) usando 2^n niveles.
+% ENTRADAS:    - x = señal de entrada.
+%              - xmax = magnitud máxima de la señal a ser cuantizada.
+%              - n = número de bits de cuantización.
+% SALIDAS:     - xq = señal cuantizada.
+
+%vector que contendrá la señal en binario para luego graficar los 6 tipos de señal
 bit = [];
-last = -1;  #Con esto se permite que no haya espacios entre los bits
-if (nargin~=3) # Se valida que la entrada sea correcta 
+
+#con esto no se permite que haya espacios entre los bits
+last = -1; 
+
+#validar que la entrada sea correcta 
+if (nargin~=3) 
 	disp('Número incorrecto de argumentos de entrada');
 	return;
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-L=2^n;    #Cantidad de franjas de amplitud a cuantizar 
-Delta=(2*xmax)/L; #distancia dentre intervalos de amplitud 
-q=floor(L*((x+xmax)/(2*xmax)));    #Se seleccionan los valores enteros de los valores de amplitud que vamos a utilizar      % q={...,-2,-1,0,1,2,...,L-1,L,L+1,...}
+
+#cantidad de franjas de amplitud a cuantizar 
+L = 2 ^ n;    
+
+#distancia dentre intervalos de amplitud 
+Delta = (2 * xmax) / L; 
+
+#se seleccionan los valores enteros de los valores de amplitud que vamos a utilizar      
+%q={...,-2,-1,0,1,2,...,L-1,L,L+1,...}
+q = floor(L * ((x + xmax) / (2 * xmax)));  
+
+%quitamos los valores repetidos  
 unique(q);
-i=find(q>L-1); q(i)=L-1;   #Truncamos los que son mayores o iguales a L                        % q={...,-2,-1,0,1,2,...,L-1}
+
+#truncamos los que son mayores o iguales a L  
+i = find(q > L - 1); 
+
+% q={...,-2,-1,0,1,2,...,L-1}
+q(i) = L - 1;   
+
+%quitamos los valores repetidos                        
 unique(q);
-i=find(q<0); q(i)=0;       #Truncamos los que son menores a 0                           % q={0,1,2,...,L-1}
+
+#truncamos los que son menores a 0                           
+% q={0,1,2,...,L-1}
+i = find(q < 0); 
+q(i) = 0;   
+
+%quitamos los valores repetidos     
 unique(q);
-xq = (q*Delta)-xmax+(0.5*Delta); #Aquí se hace el truncamiento a los puntos medios de nuestros valores 
+
+#truncamiento a los puntos medios de los valores 
+xq = (q * Delta) - xmax + (0.5 * Delta); 
+
+%quitamos los valores repetidos  
 unique(xq);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for i = 1:length(q)
+
+%iteramos sobre el vector q para obtener las señales cuantizadas
+for i = 1 : length(q)
   if (last != q(i))
     str = dec2bin(q(i));
-    if (length(str) < n) #Si a la cadena de bits le faltan 0 se les asignan a la izquierda 
-      ceros = num2str(zeros(1,(n-length(str))));
+    
+    #si a la cadena de bits le faltan 0 se les asignan a la izquierda 
+    if (length(str) < n) 
+      ceros = num2str(zeros(1, (n - length(str))));
       ceros = ceros(~isspace(ceros));
-      str = strcat(ceros,str);
+      
+      %str tiene almacenada la codificación
+      str = strcat(ceros, str);
     endif
-    %str #imprimimos para debugging la cadena
-    for j = 1:length(str) #vamos a concatenar todas las señales cuantizadas obtenidas
+    
+    #concatenar todas las señales cuantizadas obtenidas
+    for j = 1 : length(str) 
       bit = [bit str2num(str(j))];
     end
+    
+    %actualizamos last
     last = q(i); 
   endif
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- #Devolvemos "bit" con las señales concatenadas y xq con las señales cuantizadas. 
+
+#devolvemos el arreglo llmadao bit con las señales concatenadas y xq con las señales cuantizadas
