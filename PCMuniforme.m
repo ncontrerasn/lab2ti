@@ -1,7 +1,7 @@
 %{
 construyendo m(t)
-hacemos un for para saber cu·ntas sinusoides vana a componer m(t)
-se itera para saber cu·l es la frecuencia m·xima
+hacemos un for para saber cu√°ntas sinusoides vana a componer m(t)
+se itera para saber cu√°l es la frecuencia m√°xima
 %}
 
 %inicializar m(t) en 0 para luego ir sumando las sinusoides
@@ -10,7 +10,7 @@ mt = 0;
 %cantidad de sinusoides
 n = input('Cantidad de sinusoides: ');
 
-#frecuencia m·xima inicializada en -1
+#frecuencia m√°xima inicializada en -1
 fm = -1;    
 
 #arreglo de amplitudes de las sinusoides                       
@@ -22,16 +22,16 @@ fi = [1 : n];
 #arreglo de selcciones, 1 para seno y 2 para coseno                           
 selection = [1 : n];   
 
-%for para tomar las frecuencias, amplitudes y ver el tipo de seÒal (seno o coseno) de todas las sinusoides y actulizar la frecuencia m·xima              
+%for para tomar las frecuencias, amplitudes y ver el tipo de se√±al (seno o coseno) de todas las sinusoides y actulizar la frecuencia m√°xima              
 for i = 1 : n
   printf("Sinusoide #%d\n", i);
   ai(1, i) = input('Amplitud : ');
   fi(1, i) = input('Frecuencia: ');
   
-  #aquÌ se decide si las sinusoides son senos o cosenos concretamnete 
+  #aqu√≠ se decide si las sinusoides son senos o cosenos concretamnete 
   selection(1, i) = input('[1 -> seno, 2 -> coseno]: ');
  
-  #se actualiza la frecuencia m·xima. AquÌ hacemos que se cumpla el teorema del muestreo  
+  #se actualiza la frecuencia m√°xima. Aqu√≠ hacemos que se cumpla el teorema del muestreo  
   if (fm < fi(1, i))
     fm = fi(1, i);                       
   endif
@@ -43,13 +43,13 @@ fs = 20 * fm;
 #intervalo de muestreo                       
 Ts = 1 / fs;     
 
-%duraciÛn de la seÒal                           
+%duraci√≥n de la se√±al                           
 T = 1;     
 
 %arreglo del tiempo                            
 t = [0 : Ts : T];    
 
-%cadena para hacer despuÈs la demodulaciÛn                        
+%cadena para hacer despu√©s la demodulaci√≥n                        
 cadena = '0';
 
 %for para sumar a m(t) todas las sinusoides y actulizar la cadena para demodular
@@ -71,45 +71,45 @@ end
 X = fftshift(fft(mt) * Ts);                         
 N = length(X);
 
-#se hace el ajuste correspondiente para poder representar de forma lo m·s parecida posible, la transformada teÛrica con la transformada original. 
+#se hace el ajuste correspondiente para poder representar de forma lo m√°s parecida posible, la transformada te√≥rica con la transformada original. 
 df = (1 / (N * Ts));                      
 tN = [ -(ceil((N - 1) / 2) : -1 : 1), 0, (1 : floor((N - 1) / 2)) ] * df;
 
-#arreglos de la funciÛn cuantificada
-%xsq tiene la seÒal cuantizada
-%bits para procesarse y graficar los 6 tipos de seÒales requeridas
+#arreglos de la funci√≥n cuantificada
+%xsq tiene la se√±al cuantizada
+%bits para procesarse y graficar los 6 tipos de se√±ales requeridas
 [xsq, bits] = cuantUniforme(mt, 1, 4);            
 
-%gr·fica #1: contiene la seÒal muestreada, seÒal cuantizada, la transformada de fourier y las 6 reprentaciones 
+%gr√°fica #1: contiene la se√±al muestreada, se√±al cuantizada, la transformada de fourier y las 6 reprentaciones 
 figure(1);
 
-#graficamos la seÒal muestreada
+#graficamos la se√±al muestreada
 subplot(3, 3, 1);
 stem(t, mt, 'b');
-title('SeÒal muestreada');
+title('Se√±al muestreada');
 xlabel('t');
 ylabel('mt(t) (muestreada)');
 axis([0 T -sum(ai(:)) sum(ai(:))]);
 
-#graficamos la seÒal cuantizada, aquÌ usamos xsq
+#graficamos la se√±al cuantizada, aqu√≠ usamos xsq
 subplot(3, 3, 2);
 stem(t, xsq, 'r');
-title('SeÒal cuantizada');
+title('Se√±al cuantizada');
 xlabel('t'); 
 ylabel('mt(t) [Cuantizada]');
 axis([0 T -1.1 1.1]);
 
-#graficamos la transformada de Fourier de la seÒal muestreada
+#graficamos la transformada de Fourier de la se√±al muestreada
 subplot(3, 3, 3);
 stem(tN, abs(X), 'k');
-title('FFT de la seÒal muestreada');
+title('FFT de la se√±al muestreada');
 xlabel('w'); 
 ylabel('X(w)');
 
-#cantidad de bits concatenados obtenidos en la funciÛn cuantUniforme
+#cantidad de bits concatenados obtenidos en la funci√≥n cuantUniforme
 Xmax = length(bits);
 
-#datos que determinan la presiciÛn de la gr·fica, especifica el n˙mero de puntos en el eje horizontal
+#datos que determinan la presici√≥n de la gr√°fica, especifica el n√∫mero de puntos en el eje horizontal
 datos = 1000;
 
 #vector de unos 
@@ -118,11 +118,11 @@ unos = ones(1, datos);
 %vector de ceros
 ceros = zeros(1, datos);
 
-#vector para graficar cada tipo de codificaciÛn
+#vector para graficar cada tipo de codificaci√≥n
 array = [];
 
-%vector de tiempo para graficar las 6 seÒales
-t_2 = (0 : (length(array) - 1)) / datos;
+%vector de tiempo para graficar las 6 se√±ales
+t_2 = [];
 
 #unipolar NRZ
 for i = 1 : Xmax
@@ -134,7 +134,10 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%llenar el vector del tiempo
+t_2 = (0 : (length(array) - 1)) / datos;
+
+%gr√°fica
 subplot(3, 3, 4);
 plot(t_2, array);
 title('Unipolar NRZ');
@@ -156,7 +159,7 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%gr√°fica
 subplot(3, 3, 5);
 plot(t_2, array);
 title('Bipolar NRZ');
@@ -169,7 +172,7 @@ array = [];
 
 #unipolar RZ
 #se concatena un 0 a la mitad de cada pulso
-%arreglo RZ para dar la forma de esta seÒal a la salida
+%arreglo RZ para dar la forma de esta se√±al a la salida
 RZ = [ones(1, datos / 2) zeros(1, datos / 2)]; 
 for i = 1 : Xmax
   switch bits(i)
@@ -180,7 +183,7 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%gr√°fica
 subplot(3, 3, 6);
 plot(t_2, array);
 title('Unipolar RZ');
@@ -201,7 +204,7 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%gr√°fica
 subplot(3, 3, 7);
 plot(t_2,array);
 title('Bipolar RZ');
@@ -228,7 +231,7 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%gr√°fica
 subplot(3, 3, 8);
 plot(t_2, array);
 title('AMI');
@@ -240,7 +243,7 @@ grid on;
 array = [];
 
 #manchester
-%arreglo MAN para dar la forma de esta seÒal a la salida
+%arreglo MAN para dar la forma de esta se√±al a la salida
 MAN = [ones(1, datos / 2)  -ones(1, datos / 2)];
 for i = 1 : Xmax
   switch bits(i)
@@ -251,7 +254,7 @@ for i = 1 : Xmax
   end
 end
 
-%gr·fica
+%gr√°fica
 subplot(3, 3, 9);
 plot(t_2, array);
 title('Manchester');
@@ -259,41 +262,41 @@ xlabel(['Bits']);
 axis([0 Xmax -2 2]);
 grid on;
 
-#funciÛn m
+#funci√≥n m
 m = inline(cadena, 't');
 
-#devolvemos la seÒal recuperada con los valores de la muestra
-%mrec es la sumatoria de la seÒal para demodular
+#devolvemos la se√±al recuperada con los valores de la muestra
+%mrec es la sumatoria de la se√±al para demodular
 mrec = 0;
 
-%ecuaciÛn 5.2 con sinc
+%ecuaci√≥n 5.2 con sinc
 for i = 0 : 1 : T / Ts
   
-  %mr guarda los coeficientes de la seÒal m(t) al iterar sobre ella
+  %mr guarda los coeficientes de la se√±al m(t) al iterar sobre ella
   mr = (m(i * Ts));
   
   %sumando todos los elementos de mr
   mrm = sum(mr( : ));
   
-  %sumatoria, se hace uso de la funciÛn sinc para simplificar c·lculos
+  %sumatoria, se hace uso de la funci√≥n sinc para simplificar c√°lculos
   mrec = mrec + (mrm * (sinc(2 * fs * (t - i * Ts))));
 endfor
 
-%gr·fica #2: contiene la seÒal muestreada y la seÒal recuperada por demodulaciÛn
+%gr√°fica #2: contiene la se√±al muestreada y la se√±al recuperada por demodulaci√≥n
 figure(2);
 
-%gr·fica de la seÒal muestreada
+%gr√°fica de la se√±al muestreada
 subplot(2, 1, 1);
 stem(t, mt, 'b');
-title('SeÒal muestreada');
+title('Se√±al muestreada');
 xlabel('t');
 ylabel('x(t)');
 axis([0 1 -sum(ai( : )) sum(ai( : ))]);
 
-%gr·fica de la seÒal recuperada usando el arreglo mrec
+%gr√°fica de la se√±al recuperada usando el arreglo mrec
 subplot(2, 1 ,2);
 plot(t, mrec, 'b');
-title('SeÒal recuperada');
+title('Se√±al recuperada');
 xlabel('t');
 ylabel('x(t)');
 axis([0 1 -sum(ai( : )) sum(ai( : ))]);
