@@ -77,7 +77,7 @@ tN = [ -(ceil((N - 1) / 2) : -1 : 1), 0, (1 : floor((N - 1) / 2)) ] * df;
 
 #arreglos de la función cuantificada
 %xsq tiene la señal cuantizada
-%bits para procesarse y graficar los 6 tipos de señales requeridas
+%bits tiene la señal codificada para procesarse y graficar los 6 tipos de señales requeridas
 [xsq, bits] = cuantUniforme(mt, 1, 4);            
 
 %gráfica #1: contiene la señal muestreada, señal cuantizada, la transformada de fourier y las 6 reprentaciones 
