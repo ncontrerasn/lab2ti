@@ -1,12 +1,12 @@
 function [xq, bit] = cuantUniforme(x, xmax, n)
   
-% DESCRIPCIÓN: cuantiza x sobre (-xmax, xmax) usando 2^n niveles.
-% ENTRADAS:    - x = señal de entrada.
-%              - xmax = magnitud máxima de la señal a ser cuantizada.
-%              - n = número de bits de cuantización.
-% SALIDAS:     - xq = señal cuantizada.
+% DESCRIPCIÃ“N: cuantiza x sobre (-xmax, xmax) usando 2^n niveles.
+% ENTRADAS:    - x = seÃ±al de entrada.
+%              - xmax = magnitud mÃ¡xima de la seÃ±al a ser cuantizada.
+%              - n = nÃºmero de bits de cuantizaciÃ³n.
+% SALIDAS:     - xq = seÃ±al cuantizada.
 
-%vector que contendrá la señal en binario para luego graficar los 6 tipos de señal
+%vector que contendrÃ¡ la seÃ±al codificada para luego graficar los 6 tipos de seÃ±al
 bit = [];
 
 #con esto no se permite que haya espacios entre los bits
@@ -14,7 +14,7 @@ last = -1;
 
 #validar que la entrada sea correcta 
 if (nargin~=3) 
-	disp('Número incorrecto de argumentos de entrada');
+	disp('NÃºmero incorrecto de argumentos de entrada');
 	return;
 end
 
@@ -54,7 +54,7 @@ xq = (q * Delta) - xmax + (0.5 * Delta);
 %quitamos los valores repetidos  
 unique(xq);
 
-%iteramos sobre el vector q para obtener las señales cuantizadas
+%iteramos sobre el vector q para obtener las seÃ±ales cuantizadas
 for i = 1 : length(q)
   if (last != q(i))
     str = dec2bin(q(i));
@@ -64,11 +64,11 @@ for i = 1 : length(q)
       ceros = num2str(zeros(1, (n - length(str))));
       ceros = ceros(~isspace(ceros));
       
-      %str tiene almacenada la codificación
+      %str tiene almacenada la codificaciÃ³n
       str = strcat(ceros, str);
     endif
     
-    #concatenar todas las señales cuantizadas obtenidas
+    #concatenar todas las seÃ±ales codificadas obtenidas
     for j = 1 : length(str) 
       bit = [bit str2num(str(j))];
     end
@@ -78,4 +78,4 @@ for i = 1 : length(q)
   endif
 end
 
-#devolvemos el arreglo llmadao bit con las señales concatenadas y xq con las señales cuantizadas
+#devolvemos el arreglo llmadao bit con las seÃ±ales codificadas y xq con las seÃ±ales cuantizadas
